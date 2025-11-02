@@ -4,13 +4,25 @@ import { validateStudentRow, validateTeacherRow } from "../utils/validators.js";
 
 export const uploadData = async (req, res) => {
   try {
-    if (!req.files?.file) return res.status(400).json({ error: "File required" });
+    if (!req.files?.file) {
+      return res.status(400).json({ error: "File required" });
+    }
 
     const { file } = req.files;
     const { type } = req.query;
+
+    const allowedExtensions = [".csv", ".xml"];
+    const fileExt = file.name.substring(file.name.lastIndexOf(".")).toLowerCase();
+
+    if (!allowedExtensions.includes(fileExt)) {
+      return res
+        .status(400)
+        .json({ error: "Invalid file type. Only .csv and .xml files are allowed." });
+    }
     const rows = await parseFileBuffer(file.name, file.data);
 
     const results = [];
+
     for (let i = 0; i < rows.length; i++) {
       const row = rows[i];
       const rowIndex = i + 1;
@@ -34,15 +46,17 @@ export const uploadData = async (req, res) => {
       results.push({ row: rowIndex, ok: true });
     }
 
-    const data = await AuditLog.create({
+    await AuditLog.create({
       action: "Upload",
       entity: type === "teacher" ? "mis_teachers" : "mis_students",
       performedBy: "admin",
       details: { file: file.name, summary: results },
     });
 
-    console.log(data, "data")
-    res.json({ summary: results });
+    res.json({
+      message: "File uploaded successfully",
+      summary: results,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message });
