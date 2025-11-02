@@ -1,0 +1,31 @@
+{
+  "name": "admin-mis-backend",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@fastify/multipart": "^9.3.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^5.1.0",
+    "express-fileupload": "^1.5.2",
+    "fastify": "^4.0.0",
+    "fastify-plugin": "^4.0.0",
+    "mysql2": "^3.0.0",
+    "papaparse": "^5.3.2",
+    "sequelize": "^6.32.0",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.5",
+    "@types/node": "^18.0.0",
+    "@types/papaparse": "^5.2.6",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.0.0"
+  }
+}
